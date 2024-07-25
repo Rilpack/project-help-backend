@@ -24,7 +24,7 @@ app.include_router(users_router, tags=["Users"])
 
 @app.get("/")
 def hello_index():
-    return {"Heloaasas": "World"}
+    return {"Helowwww": "World"}
 
 
 if __name__ == "__main__":
