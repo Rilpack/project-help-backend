@@ -1,5 +1,6 @@
 fastapi
 sqlalchemy
 pydantic
+pydantic_settings
 uvicorn
 psycopg2
