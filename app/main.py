@@ -1,13 +1,13 @@
 from fastapi import FastAPI
+
 from .db import models
 from .db.datebase import engine
-from .api.v1.endpoints import questions, choices
+
+from .api_v1 import router as router_v1
 
 app = FastAPI()
+app.include_router(router=router_v1)
 models.Base.metadata.create_all(bind=engine)
-
-app.include_router(questions.router, prefix="/api/v1")
-app.include_router(choices.router, prefix="/api/v1")
 
 
 @app.get("/")

@@ -1,14 +1,11 @@
 from sqlalchemy.orm import Session
+
+from app.api_v1.questions import schemas
 from app.db import models
-from app.api.v1.endpoints import schemas
 
 
 def get_question(db: Session, question_id: int):
     return db.query(models.Questions).filter(models.Questions.id == question_id).first()
-
-
-def get_choices(db: Session, question_id: int):
-    return db.query(models.Choices).filter(models.Choices.question_id == question_id).all()
 
 
 def create_question(db: Session, question: schemas.QuestionBase):
@@ -20,7 +17,7 @@ def create_question(db: Session, question: schemas.QuestionBase):
         db_choice = models.Choices(
             choice_text=choice.choice_text,
             is_correct=choice.is_correct,
-            question_id=db_question.id
+            question_id=db_question.id,
         )
         db.add(db_choice)
     db.commit()

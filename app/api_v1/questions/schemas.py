@@ -1,10 +1,7 @@
 from pydantic import BaseModel
 from typing import List
 
-
-class ChoiceBase(BaseModel):
-    choice_text: str
-    is_correct: bool
+from app.api_v1.choices.schemas import ChoiceBase
 
 
 class QuestionBase(BaseModel):
