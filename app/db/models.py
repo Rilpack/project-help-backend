@@ -1,18 +1,12 @@
-from sqlalchemy import Boolean, Integer, String, Column, ForeignKey
+from sqlalchemy import Boolean, Integer, String, Column, ForeignKey, DateTime
 from app.db.datebase import Base
+import datetime
 
 
-class Questions(Base):
-    __tablename__ = 'questions'
-
-    id = Column(Integer, primary_key=True, index=True)
-    question_text = Column(String, index=True)
-
-
-class Choices(Base):
-    __tablename__ = 'choices'
+class Users(Base):
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    choice_text = Column(String, index=True)
-    is_correct = Column(Boolean, default=False)
-    question_id = Column(Integer, ForeignKey("questions.id"))
+    username = Column(String, index=True, nullable=False)
+    email = Column(String, index=True, nullable=False, unique=True)
+    created_at = Column(DateTime, default=datetime.datetime.now())
