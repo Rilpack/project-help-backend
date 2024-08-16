@@ -2,6 +2,7 @@ fastapi
 sqlalchemy
 pydantic
 pydantic_settings
+pydantic[email]
 uvicorn
 psycopg2
 alembic
