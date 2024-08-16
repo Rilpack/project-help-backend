@@ -4,3 +4,4 @@ pydantic
 pydantic_settings
 uvicorn
 psycopg2
+alembic
