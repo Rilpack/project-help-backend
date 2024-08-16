@@ -1,6 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
-from typing import Annotated
+from fastapi import APIRouter, HTTPException
 
 from app.api.v1.endpoints import schemas, crud
 from app.db.datebase import get_db, db_dependency
