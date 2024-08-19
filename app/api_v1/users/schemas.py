@@ -1,10 +1,13 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 
 
 class UserBase(BaseModel):
+    model_config = ConfigDict(strict=True)
+
     username: str
-    email: EmailStr
+    password: str
+    email: EmailStr | None = None
 
 
 class UserBaseView(BaseModel):
@@ -14,4 +17,4 @@ class UserBaseView(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
