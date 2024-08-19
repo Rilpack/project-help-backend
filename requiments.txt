@@ -7,3 +7,5 @@ uvicorn
 psycopg2
 alembic
 pyjwt[crypto]
+bcrypt
+python-multipart
