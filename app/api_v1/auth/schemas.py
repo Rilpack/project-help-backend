@@ -3,10 +3,10 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 
 class UserSchema(BaseModel):
     model_config = ConfigDict(strict=True)
+
     username: str
-    password: bytes
+    password: str
     email: EmailStr | None = None
-    active: bool = True
 
 
 class TokenInfo(BaseModel):

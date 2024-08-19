@@ -1,7 +1,9 @@
+import base64
 from datetime import datetime, timedelta
 
 import jwt
 import bcrypt
+from fastapi import HTTPException
 
 from app.core.config import settings
 
@@ -20,7 +22,7 @@ def encode_jwt(
     else:
         expire = now + timedelta(minutes=expire_minutes)
     to_encode.update(exp=expire, iat=now)
-    encoded = jwt.encode(payload, private_key, algorithm)
+    encoded = jwt.encode(to_encode, private_key, algorithm)
     return encoded
 
 
@@ -29,15 +31,20 @@ def decode_jwt(
     public_key: str = settings.auth_jwt.public_key_path.read_text(),
     algorithm: str = settings.auth_jwt.algorithm,
 ):
-    decoded = jwt.decode(token, public_key, algorithms=[algorithm])
-    return decoded
+    try:
+        decoded = jwt.decode(token, public_key, algorithms=[algorithm])
+        return decoded
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
 
 
-def hash_password(password: str) -> bytes:
+def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()
     pwd_bytes: bytes = password.encode()
-    return bcrypt.hashpw(pwd_bytes, salt)
+    return bcrypt.hashpw(pwd_bytes, salt).decode("utf-8")
 
 
-def validate_password(password: str, hashed_password: bytes) -> bool:
-    return bcrypt.checkpw(password.encode(), hashed_password)
+def validate_password(password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(password.encode(), hashed_password.encode())
