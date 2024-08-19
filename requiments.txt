@@ -6,3 +6,4 @@ pydantic[email]
 uvicorn
 psycopg2
 alembic
+pyjwt[crypto]
