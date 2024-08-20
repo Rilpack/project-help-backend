@@ -26,3 +26,9 @@ async def login(
         key="access_token", value=token, httponly=False, secure=True, expires=3600
     )
     return TokenInfo(access_token=token, token_type="Bearer")
+
+
+@router.post("/logout")
+async def logout(response: Response):
+    response.delete_cookie("access_token")
+    return {"detail": "Logged out successfully"}
