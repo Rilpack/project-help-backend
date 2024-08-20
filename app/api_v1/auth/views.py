@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 
 from app.api_v1.auth import utils as auth_utils
 from app.db.datebase import db_dependency
@@ -10,7 +10,10 @@ router = APIRouter(tags=["Auth"])
 
 
 @router.post("/login", response_model=TokenInfo)
-async def auth_user_issue_jwt(user: UserSchema = Depends(validate_auth_user)):
+async def login(
+    response: Response,
+    user: UserSchema = Depends(validate_auth_user),
+):
     jwt_payload = {
         "sub": user.username,
         "username": user.username,
@@ -18,5 +21,8 @@ async def auth_user_issue_jwt(user: UserSchema = Depends(validate_auth_user)):
     }
     token = auth_utils.encode_jwt(
         jwt_payload,
+    )
+    response.set_cookie(
+        key="access_token", value=token, httponly=False, secure=True, expires=3600
     )
     return TokenInfo(access_token=token, token_type="Bearer")
