@@ -1,4 +1,3 @@
-import base64
 from datetime import datetime, timedelta
 
 import jwt
@@ -16,7 +15,7 @@ def encode_jwt(
     expire_minutes: int = settings.auth_jwt.access_token_expire_minutes,
 ):
     to_encode = payload.copy()
-    now = datetime.now()
+    now = datetime.utcnow()
     if expire_timedelta:
         expire = now + expire_timedelta
     else:
@@ -31,13 +30,8 @@ def decode_jwt(
     public_key: str = settings.auth_jwt.public_key_path.read_text(),
     algorithm: str = settings.auth_jwt.algorithm,
 ):
-    try:
-        decoded = jwt.decode(token, public_key, algorithms=[algorithm])
-        return decoded
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    decoded = jwt.decode(token, public_key, algorithms=[algorithm])
+    return decoded
 
 
 def hash_password(password: str) -> str:
