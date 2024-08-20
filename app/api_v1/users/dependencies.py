@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jwt.exceptions import InvalidTokenError
@@ -12,14 +12,22 @@ http_bearer = HTTPBearer()
 
 
 def get_current_token_payload(
+    request: Request,
     credentials: HTTPAuthorizationCredentials = Depends(http_bearer),
 ) -> schemas.UserBase:
-    token = credentials.credentials
+    token = request.cookies.get("access_token")
+    if not token:
+        token = credentials.credentials
+        if not token:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="Token not found"
+            )
+
     try:
         payload = auth_utils.decode_jwt(token=token)
     except InvalidTokenError as e:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Invalid token error: {e}"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Invalid token error"
         )
     return payload
 
