@@ -4,7 +4,7 @@ from datetime import datetime
 
 class UserBase(BaseModel):
     model_config = ConfigDict(strict=True)
-
+    id: int
     username: str
     password: str
     email: EmailStr | None = None
