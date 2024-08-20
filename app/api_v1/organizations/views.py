@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status, Depends
+from fastapi import APIRouter, Depends
 
 from app.api_v1.organizations import crud, schemas
 from app.api_v1.users import schemas as users_schemas
